@@ -1,3 +1,9 @@
+.vscode/
+data/*
+!data/put_dataset_here
+.venv/
+checkpoint/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
