@@ -15,9 +15,12 @@ Experiments on our new Chest-X-Ray-4 suite and three public benchmarks show that
   <img src="assets/dual_branch_comparison.png" width="41.9%" />
 </div>
 
+## Chext-X-Ray-4 Dataset
+Please access dataset by: https://huggingface.co/datasets/ODDS2022/P2Maze
+
 ## TODO
 Code release is ongoing. The following items will be updated soon:
-- [ ] Release pre-processed Chest-X-Ray-4 dataset
+- [x] Release pre-processed Chest-X-Ray-4 dataset
 - [ ] Add experiment code
 - [ ] Add paper and poster link
 
