@@ -16,7 +16,7 @@ Experiments on our new Chest-X-Ray-4 suite and three public benchmarks show that
 </div>
 
 ## Chext-X-Ray-4 Dataset
-Please access dataset by: https://huggingface.co/datasets/ODDS2022/P2Maze
+Please access dataset by: [https://huggingface.co/datasets/ODDS2022/P2Maze](https://huggingface.co/datasets/ODDS2022/Chest-X-Ray-4)
 
 ## TODO
 Code release is ongoing. The following items will be updated soon:
