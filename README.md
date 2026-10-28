@@ -1,7 +1,7 @@
 # Decoupling Shared and Personalized Knowledge: A Dual-Branch Federated Learning Framework for Multi-Domain with Non-IID Data
-This is the PyTorch implemention of AAAI-26 paper **Decoupling Shared and Personalized Knowledge: A Dual-Branch Federated Learning Framework for Multi-Domain with Non-IID Data** by Yiran Pang, Zhen Ni, and Xiangnan Zhong.
+This is the PyTorch implementation of AAAI-26 paper **Decoupling Shared and Personalized Knowledge: A Dual-Branch Federated Learning Framework for Multi-Domain with Non-IID Data** by Yiran Pang, Zhen Ni, and Xiangnan Zhong.
 
-📄 [Appendix](assets/Appendix.pdf)
+📄 [Paper (AAAI)](https://ojs.aaai.org/index.php/AAAI/article/view/39660) | 📥 [PDF](https://ojs.aaai.org/index.php/AAAI/article/view/39660/43621) | 🖼️ [Poster](https://ojs.aaai.org/index.php/AAAI/article/view/39660/49701) | 📎 [Appendix](assets/Appendix.pdf)
 
 ## Abstract
 Federated learning (FL) enables collaborative model training without centralizing data. In multi-domain scenarios with non-identically and independently distributed (non-IID) data, prediction performance is often hindered by catastrophic forgetting of specialized local knowledge and negative transfer from conflicting client updates.
@@ -15,14 +15,95 @@ Experiments on our new Chest-X-Ray-4 suite and three public benchmarks show that
   <img src="assets/dual_branch_comparison.png" width="41.9%" />
 </div>
 
-## Chext-X-Ray-4 Dataset
-Please access dataset by: https://huggingface.co/datasets/ODDS2022/Chest-X-Ray-4
+## Usage
+### Setup
+**uv (NVIDIA GPU / NV)**
 
-## TODO
-Code release is ongoing. The following items will be updated soon:
-- [x] Release pre-processed Chest-X-Ray-4 dataset
-- [ ] Add experiment code
-- [ ] Add paper and poster link
+Install uv: https://docs.astral.sh/uv/
 
-<!-- ## Acknowledgements
-We acknowledge the open-source implementations of [FedBN](https://github.com/med-air/FedBN) and [pFedDR](https://github.com/CSU-YL/pFedDR), which provided a solid foundation for our development. -->
+```bash
+# Linux/macOS
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# Windows (PowerShell)
+powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+```
+
+```bash
+# Create a local virtualenv (recommended)
+uv venv -p 3.12
+source .venv/bin/activate
+
+# Install PyTorch CUDA wheels
+uv pip install -r requirements-uv-cu121.txt
+```
+
+Notes:
+- If your driver/toolkit is older, switch to a different wheel index (e.g. `cu118`) and adjust the extra index URL in `requirements-uv-cu121.txt`.
+- If `import torchvision` fails with missing system libs on Linux, install `libgl1` (and sometimes `libglib2.0-0`).
+
+### Dataset
+**Benchmark(Digits)**
+- Please download pre-processed datasets [here](https://huggingface.co/datasets/Jemary/FedBN_Dataset/blob/main/digit_dataset.zip), put under `data/` directory and perform following commands:
+    ```bash
+    cd ./data
+    unzip digit_dataset.zip
+    ```
+
+**Benchmark(Chest-X-Ray-4)**
+- Please download pre-processed datasets [here](https://huggingface.co/datasets/ODDS2022/Chest-X-Ray-4/blob/main/Chest-X-Ray-4.zip), put under `data/` directory and perform following commands:
+    ```bash
+    cd ./data
+    unzip Chest-X-Ray-4.zip
+    ```
+    
+### Train
+Federated Learning
+
+Please use the following commands to train a model with federated learning strategy.
+```bash
+cd federated
+# benchmark experiment
+uv run python fed_digits_twophase.py
+```
+
+### Pre-trained Checkpoints
+Trained checkpoints are hosted on Hugging Face: [ODDS2022/pFedDB](https://huggingface.co/ODDS2022/pFedDB/tree/main/checkpoint).
+
+Download them into the repository root with the `hf` CLI (`uv pip install huggingface_hub`):
+```bash
+hf download ODDS2022/pFedDB --include "checkpoint/*" --local-dir .
+```
+This creates the following layout, which the evaluation scripts expect by default:
+```
+checkpoint/
+├── digits/twophase_digits/twophase_final.pt
+└── chex/twophase_chex/twophase_chex_final
+```
+
+### Evaluate
+To evaluate the trained model, please use the following commands:
+```bash
+# Digits
+uv run python scripts/verify_digits_twophase.py --ckpt checkpoint/digits/twophase_digits/twophase_final.pt
+
+# Chest-X-Ray-4 (OVCR)
+uv run python scripts/verify_chex_twophase.py --ckpt checkpoint/chex/twophase_chex/twophase_chex_final --batch 256
+```
+
+## Citation
+If you find this work useful, please cite:
+```bibtex
+@inproceedings{pang2026decoupling,
+  title={Decoupling Shared and Personalized Knowledge: A Dual-Branch Federated Learning Framework for Multi-Domain with Non-IID Data},
+  author={Pang, Yiran and Ni, Zhen and Zhong, Xiangnan},
+  booktitle={Proceedings of the AAAI Conference on Artificial Intelligence},
+  volume={40},
+  number={29},
+  pages={24745--24754},
+  year={2026}
+}
+```
+
+## Acknowledgements
+We acknowledge the open-source implementations of [FedBN](https://github.com/med-air/FedBN) and [pFedDR](https://github.com/CSU-YL/pFedDR), which provided a foundation for our development.
