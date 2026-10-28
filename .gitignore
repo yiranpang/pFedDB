@@ -208,3 +208,11 @@ __marimo__/
 
 # Trained model checkpoints (too large for git; distribute separately)
 checkpoint/
+
+# Datasets (download separately, see README)
+data/*
+!data/put_dataset_here
+
+# Local environment
+.venv/
+.vscode/
